@@ -11,7 +11,7 @@ Backup and restore tool for Hermes Agent + OpenClaw installations.
 - **Compressed archives**: `tar.zst` format with zstd compression
 - **Google Drive upload**: Via `rclone` integration
 - **Cross-platform home dir**: Uses `dirs` crate — no hardcoded paths
-- **Auto workspace discovery**: Scans `~/.openclaw/workspace*` dynamically
+- **Auto workspace discovery**: Users can add workspace paths via `[paths] extra` in the config file
 
 ## Install
 
