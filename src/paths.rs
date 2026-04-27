@@ -70,16 +70,6 @@ impl BackupPaths {
         let h = &self.home;
         let mut specs = Vec::new();
 
-        // ~/work/openclaw
-        specs.push(DirSpec {
-            path: h.join("work/openclaw"),
-            excludes: vec![
-                "node_modules".into(), "__pycache__".into(),
-                ".git/objects".into(), "dist".into(),
-            ],
-            mode: ScanMode::Full,
-        });
-
         // ~/.hermes (everything)
         specs.push(DirSpec {
             path: h.join(".hermes"),
@@ -100,6 +90,27 @@ impl BackupPaths {
             excludes: vec![],
             mode: ScanMode::Selective(openclaw_subdirs),
         });
+
+        // ~/.openclaw workspace dirs — auto-discover instead of hardcoding
+        let ws_subdirs: Vec<String> = vec![
+            ".openclaw", "memory", "skills", ".omx", ".pi",
+            "config", "hooks", "scripts", "lib",
+        ].into_iter().map(String::from).collect();
+        let openclaw_base = h.join(".openclaw");
+        if openclaw_base.exists() {
+            if let Ok(entries) = std::fs::read_dir(&openclaw_base) {
+                for entry in entries.flatten() {
+                    let name = entry.file_name().to_string_lossy().to_string();
+                    if name.starts_with("workspace") && entry.path().is_dir() {
+                        specs.push(DirSpec {
+                            path: entry.path(),
+                            excludes: vec![],
+                            mode: ScanMode::Selective(ws_subdirs.clone()),
+                        });
+                    }
+                }
+            }
+        }
 
         // ~/.openclaw-dev
         specs.push(DirSpec {
