@@ -2,6 +2,8 @@
 
 Backup and restore tool for Hermes Agent + OpenClaw installations.
 
+![Demo](assets/demo.gif)
+
 ## Features
 
 - **Incremental-aware discovery**: Backs up `~/work/hermes-agent`, `~/work/openclaw`, `~/.hermes`, `~/.openclaw`, systemd units, and more
@@ -106,6 +108,17 @@ destination = "user@backup-server:/backups/"
 drive_remote = "gdrive"
 drive_folder = "backups/hermes"
 ```
+
+## What Gets Backed Up
+
+| Path | Description |
+|------|-------------|
+| `~/work/hermes-agent` | Hermes Agent source and config |
+| `~/work/openclaw` | OpenClaw workspace |
+| `~/.hermes` | Hermes state, logs, cache |
+| `~/.openclaw` | OpenClaw config, workspaces (auto-discovered) |
+| `~/.config/systemd/user/` | User systemd units |
+| SQLite databases | Copied safely via `sqlite3 .backup` |
 
 ## Open Source Notes
 
